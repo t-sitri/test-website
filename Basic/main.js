@@ -7,16 +7,17 @@ const visible = document.getElementById("visible");
 var canChange = true;
 window.onload = function() {
     
-    
+    intializeEyedropper()
     var image = new this.Image()
     document.querySelector('input[type="file"]').addEventListener('change', function() {
         if (this.files && this.files[0]) {
             
             image.src = URL.createObjectURL(this.files[0]);
             canChange = true; 
+            image.onload = drawImageActualSize;
         }
     });
-    image.onload = drawImageActualSize;
+    
 }
 
 function drawImageActualSize() {
@@ -27,7 +28,7 @@ function drawImageActualSize() {
 
     ctx.drawImage(this, 0,0, this.width, this.height)
     visible.style.visibility = "visible";
-    intializeEyedropper()
+    
 }
 
 
