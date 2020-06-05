@@ -7,16 +7,47 @@
    
 </head>
 <body>
-    <input type="file" />
-    <canvas id="c" width="500" height="500">
+    <input type="file" accept="image/*"/> <br/>
+    <canvas id="c" width="0" height="0">
         
     </canvas>
-
-    <div id="preview" style="width:100px; height:100px;  margin: 5px;
-    border: 1px solid rgba(0, 0, 0, .2);"></div>
-
-    <p id="rgba">rgba(0,0,0,0)</p>
+    <div id="visible" style="visibility:hidden;">
+               
+        <table style="border: 1px solid rgba(0, 0, 0, .2);" id="table-preview">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td id="special"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </table>
+        <p id="rgba">rgba(0,0,0,0)</p>
+    </span>
     <script type="text/javascript"  src="main.js"></script> 
-    
+    <style>
+        body {
+            text-align: center;
+        }
+        td {
+            width:100px;
+            height:100px;
+        }
+        #special {
+            border: 2px dashed crimson; 
+        }
+        div {
+            display: inline-block;
+        }
+        
+    </style>
 </body>
 </html>
