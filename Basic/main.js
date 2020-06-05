@@ -6,11 +6,15 @@ var canChange = true;
 window.onload = function() {
     
     
-    const image = new this.Image()
+    var image = new this.Image()
+    document.querySelector('input[type="file"]').addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            
+            image.src = URL.createObjectURL(this.files[0]);
+            img.onload = imageIsLoaded;
+        }
+    });
     image.onload = drawImageActualSize;
-    image.crossOrigin = "Anonymous";
-    image.src="https://cdn.glitch.com/4c9ebeb9-8b9a-4adc-ad0a-238d9ae00bb5%2Fmdn_logo-only_color.svg?1535749917189";
-
 }
 
 function drawImageActualSize() {
