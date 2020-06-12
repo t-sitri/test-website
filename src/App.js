@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-
+//import * as paintBucket from "paintBucket.js"; 
 // Whatever tool you implement will extend this class
 class Tool extends React.Component {
   constructor(props) {
@@ -70,8 +70,8 @@ class CanvasComponent extends React.Component {
     //const replace = window.current.props.onCanvasClick(this.refs.canvas,coordinates);
     var ctx = this.refs.canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, this.refs.canvas.width, this.refs.canvas.height);
-    window.current.props.onCanvasClick(this.refs.canvas, coordinates);
-    //this.refs.canvas.getContext("2d").drawImage(replace, 0,0);
+    const replace = window.current.props.onCanvasClick(this.refs.canvas, coordinates);
+    this.refs.canvas.getContext("2d").drawImage(replace, 0,0);
   }
 
   handleHover = (event) => {
@@ -110,7 +110,6 @@ function paintBucketClick(canvas, coordinates) {
   var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const pixelToFill = [11,11,11,255];
   const tolerance = 0.5; 
-  //let matrix = imageDataToMatrix(imageData, canvas.width);
 
   let visited = {};
   let q = [[x,y]];
@@ -144,77 +143,14 @@ function paintBucketClick(canvas, coordinates) {
     
   }
 
-  /*
-  function recursivelyPaintBucket(currentCoordinates, tolerance, colourToReplace, colourToCompare) {
 
-    if(!(currentCoordinates in visited) && (currentCoordinates[0] >= 0 && currentCoordinates[1] >= 0 && currentCoordinates[0] <= canvas.width && currentCoordinates[1] <= canvas.height)) {
-      console.log(visited);
-      const currentPixel = matrix[currentCoordinates[1]][currentCoordinates[0]];
-      var canDoIt = true;
-      visited[currentCoordinates] = 1;
-      for(var i = 0; i < 3; i ++ ) {
-        if(Math.abs(currentPixel[i]-colourToCompare[i])/255 > tolerance) {
-          
-          canDoIt = false;
-          break;
-        }
-      }
-      if(canDoIt) {
-        // change the value of the current pixel
-        for(var j = 0; j < 3; j ++ ) {
-          matrix[currentCoordinates[1]][currentCoordinates[0]][j] = colourToReplace[j];
-        }
-        matrix[currentCoordinates[1]][currentCoordinates[0]][4] = 255;
-
-        // add the nearby pixels
-        const coordinatesToCheck = [[coordinates[0] - 1, coordinates[1]], [coordinates[0], coordinates[1] - 1], [coordinates[0]+1, coordinates[1]], [coordinates[0], coordinates[1]+1]];
-
-        for (var coordinate of coordinatesToCheck) {
-          recursivelyPaintBucket(coordinate, tolerance, colourToReplace, colourToCompare);
-        }
-      }
-    }
-  }
-  */
-  //recursivelyPaintBucket([x, y], 0.20, [255, 255, 255, 255], currPixel);
-  //matrix[20][20] = [255, 255, 255, 255];
-  //ctx.putImageData(new ImageData(new Uint8ClampedArray(matrixToImageData(matrix)), canvas.width, canvas.height),0,0);
-  
   ctx.putImageData(imageData, 0,0);
-  return 0; 
-}
-
-function matrixToImageData(matrix) {
-  let to_ret = [];
-  for(let row of matrix) {
-    for(let rgba of matrix) {
-      rgba.forEach(element => {
-        to_ret.push(element);
-      });
-    }
-  }
-  return to_ret;
-}
-
-function imageDataToMatrix(imageData, width) {
-  var to_ret = [];
-  var temp = [];
-  var group = 0; 
-  
-  for(var i = 0; i < imageData.data.length; i+=4) {
-    temp.push([imageData.data[i], imageData.data[i+1], imageData.data[i+2], imageData.data[i+3]]);
-    if ((group+1) % width === 0 ) {
-      to_ret.push(temp);
-      temp = [];
-    }
-    group += 1;
-  }
-  return to_ret; 
+  return canvas; 
 }
 
 
 // current tool that is in use
-window.current =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={dothing} onCanvasHover={dothing}/>;
+window.current =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
 
 
 class App extends React.Component {
