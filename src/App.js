@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
+
 // Whatever tool you implement will extend this class
 class Tool extends React.Component {
   constructor(props) {
@@ -11,6 +13,14 @@ class Tool extends React.Component {
 
   handleClick(event) {
     window.current = this; 
+    const preview = document.getElementById("preview");
+    preview.style.height = "0px";
+    preview.style.visibility ="hidden";
+
+    if(this.props.onclick) {
+     
+      this.props.onclick(); 
+    }
   }
 
   render() {
@@ -19,6 +29,7 @@ class Tool extends React.Component {
     );
   }
 }
+
 
 function donothing(canvas, coordinates) {
   console.log(coordinates);
@@ -95,12 +106,12 @@ function paintBucketClick(canvas, coordinates) {
   const pixelToFill = hexToRgb(document.getElementById("color").value);
   const tolerance = 0.1; 
 
-  let visited = {};
+  let visited = new Map();
   let q = [[x,y]];
   let currCoordinates;
   let currPixelCoord;
   let canDoIt;
-  while(q.length != 0) {
+  while(q.length !== 0) {
     canDoIt = true;
     currCoordinates = q.shift();
     if(!(currCoordinates in visited) && (currCoordinates[0] >= 0 && currCoordinates[1] >= 0 && currCoordinates[0] <= canvas.width && currCoordinates[1] <= canvas.height)) {
@@ -131,11 +142,53 @@ function paintBucketClick(canvas, coordinates) {
   ctx.putImageData(imageData, 0,0);
   return canvas; 
 }
+function RGBToHex(rgba) {
+  let to_ret = "#";
+  let temp;
+  for(let i = 0; i < 3; i++) {
+    temp = rgba[i].toString(16);
+    if (temp.length === 1) {
+      to_ret += "0";
+    }
+    to_ret += temp; 
+  }
+  return to_ret;
+}
+
+function setColorEyeDropper(canvas, coordinates) {
+  var ctx = canvas.getContext("2d");
+  let rect = canvas.getBoundingClientRect();
+  
+  const x = Math.round(coordinates[0] - rect.left); const y = Math.round(coordinates[1] -rect.top);
+  const imageData = ctx.getImageData(x, y, 1,1).data;
+  console.log(RGBToHex(imageData));
+  document.getElementById("color").value = RGBToHex(imageData);
+}
 
 
 // current tool that is in use
 var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
 window.current = paintBrush; 
+
+function setVisible() {
+  let preview = document.getElementById("preview");
+
+  preview.style.visibility="visible";
+  preview.style.width = "50px";
+  preview.style.height = "50px";
+  preview.style.borderRadius = "20px";
+  preview.style.backgroundColor = document.getElementById("color").value;
+}
+
+function setColorHover(canvas, coordinates) {
+  var ctx = canvas.getContext("2d");
+  let rect = canvas.getBoundingClientRect();
+  
+  const x = Math.round(coordinates[0] - rect.left); const y = Math.round(coordinates[1] -rect.top);
+  const imageData = ctx.getImageData(x, y, 1,1).data;
+
+  document.getElementById("preview").style.backgroundColor = RGBToHex(imageData);
+}
 
 class App extends React.Component {
 
@@ -145,9 +198,11 @@ class App extends React.Component {
         <header className="App-header">
           
           <CanvasComponent /> 
-          <input type="color" id="color"></input>
+          <div id="preview" style={{preview:"hidden"}}></div> <br/>
+          <input type="color" id="color"></input> 
           {paintBrush}
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+          <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible}/>
         </header>
       </div>
     );
