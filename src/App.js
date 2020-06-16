@@ -30,8 +30,9 @@ class CanvasComponent extends React.Component {
  constructor(props) {
   super(props);
   this.getInput = this.getInput.bind(this);
-  this.fileInput = React.createRef(); 
+  this.fileInput = React.createRef();
  }
+
  getInput(event) {
    event.preventDefault();
    var image = new Image();
@@ -58,14 +59,36 @@ class CanvasComponent extends React.Component {
 
   handleHover = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasHover(this.refs.canvas,coordinates);
+    window.current.props.onCanvasHover(this.refs.canvas, coordinates);
+  }
+
+  handleMouseDown = (event) => {
+    var coordinates = [event.clientX, event.clientY];
+    window.current.props.onCanvasMouseDown(this.refs.canvas, coordinates);
+  }
+
+  handleMouseMove = (event) => {
+    var coordinates = [event.clientX, event.clientY];
+    window.current.props.onCanvasMouseMove(this.refs.canvas, coordinates);
+  }
+
+  handleMouseUp = (event) => {
+    var coordinates = [event.clientX, event.clientY];
+    window.current.props.onCanvasMouseUp(this.refs.canvas, coordinates);
   }
 
   render() {
       return (
         <span>
           <input type="file" accept="image/*" ref={this.fileInput} onChange={this.getInput}/> <br/>
-          <canvas ref="canvas" width={300} height={300} onMouseDown={this.handleClick} onMouseMove={this.handleHover}></canvas>
+      <canvas ref="canvas" 
+        width={300} 
+        height={300}
+        onClick={this.handleClick}
+        onMouseDown={this.handleMouseDown} 
+        onMouseMove={this.handleHover}
+        onMouseUp={this.handleMouseUp}>
+      </canvas>
         </span>
       );
   }
@@ -82,6 +105,56 @@ function hexToRgb(hex) {
   return [parseInt(result[1], 16),
     parseInt(result[2], 16),
     parseInt(result[3], 16), 255]
+} 
+
+window.isDrawing = false;
+let x1 = 0;
+let y1 = 0;
+
+//updates x1 and y1 values to coordinates of the mouse down event
+function paintBrushMouseDown(canvas, coordinates) {
+  let rect = canvas.getBoundingClientRect();
+  x1 = Math.round(coordinates[0] - rect.left); 
+  y1 = Math.round(coordinates[1] -rect.top);
+  window.isDrawing = true;
+}
+
+/*draws a line between the previous coordinate and
+  the new coordinate passed to the method*/
+function paintBrushMouseMove(canvas, coordinates) {
+  let rect = canvas.getBoundingClientRect();
+  let x2 = Math.round(coordinates[0] - rect.left); 
+  let y2 = Math.round(coordinates[1] -rect.top);
+  if (window.isDrawing === true) {
+    drawLine(canvas, x1, y1, x2, y2);
+    x1 = Math.round(coordinates[0] - rect.left);
+    y1 = Math.round(coordinates[1] -rect.top);
+  }
+}
+
+/*completes the line being drawn between the previous coordinate and
+  the new coordinate passed to the method*/
+function paintBrushMouseUp(canvas, coordinates) {
+  let rect = canvas.getBoundingClientRect();
+  let x2 = Math.round(coordinates[0] - rect.left); 
+  let y2 = Math.round(coordinates[1] -rect.top);
+  if (window.isDrawing === true) {
+    drawLine(canvas, x1, y1, x2, y2);
+    x1 = 0;
+    x2 = 0;
+    window.isDrawing = false;
+  }
+}
+
+function drawLine(canvas, x1, y1, x2, y2) {
+  var ctx = canvas.getContext("2d");
+  ctx.beginPath();
+  ctx.strokeStyle = document.getElementById('color').value;
+  ctx.lineWidth = 1;
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.closePath();
 }
 
 
@@ -134,7 +207,12 @@ function paintBucketClick(canvas, coordinates) {
 
 
 // current tool that is in use
-var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
+var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" 
+                        text="paintbrush" 
+                        onCanvasClick={donothing} 
+                        onCanvasHover={paintBrushMouseMove} 
+                        onCanvasMouseUp={paintBrushMouseUp}
+                        onCanvasMouseDown={paintBrushMouseDown} />;
 window.current = paintBrush; 
 
 class App extends React.Component {
@@ -147,7 +225,11 @@ class App extends React.Component {
           <CanvasComponent /> 
           <input type="color" id="color"></input>
           {paintBrush}
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" 
+                text="doggie time" 
+                onCanvasClick={paintBucketClick} 
+                onCanvasHover={donothing} />
+
         </header>
       </div>
     );
