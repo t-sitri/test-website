@@ -65,27 +65,39 @@ class CanvasComponent extends React.Component {
   // it needs to take the canvas and the current mouse coordinates as a parameter. 
   handleClick = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasClick(this.refs.canvas, coordinates);
+    if(window.current.props.onCanvasClick) {
+      window.current.props.onCanvasClick(this.refs.canvas, coordinates);
+    }
   }
 
   handleHover = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasHover(this.refs.canvas, coordinates);
+    if(window.current.props.onCanvasHover) {
+      window.current.props.onCanvasHover(this.refs.canvas, coordinates);
+    }
+    
   }
 
   handleMouseDown = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasMouseDown(this.refs.canvas, coordinates);
+    if(window.current.props.onCanvasMouseDown) {
+      window.current.props.onCanvasMouseDown(this.refs.canvas, coordinates);
+    }
+
   }
 
   handleMouseMove = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasMouseMove(this.refs.canvas, coordinates);
+    if(window.current.props.onCanvasMouseDown) {
+      window.current.props.onCanvasMouseDown(this.refs.canvas, coordinates);
+    }
   }
 
   handleMouseUp = (event) => {
     var coordinates = [event.clientX, event.clientY];
-    window.current.props.onCanvasMouseUp(this.refs.canvas, coordinates);
+    if(window.current.props.onCanvasMouseUp) {
+      window.current.props.onCanvasMouseUp(this.refs.canvas, coordinates);
+    }
   }
 
   render() {
@@ -279,16 +291,8 @@ class App extends React.Component {
           <div id="preview" style={{preview:"hidden"}}></div> <br/>
           <input type="color" id="color"></input> 
           {paintBrush}
-<<<<<<< HEAD
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" 
-                text="doggie time" 
-                onCanvasClick={paintBucketClick} 
-                onCanvasHover={donothing} />
-
-=======
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
-          <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible}/>
->>>>>>> 99138af865951f31b7a278d17604e2c6d7ee0839
+          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} />
+          <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
         </header>
       </div>
     );
