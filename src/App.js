@@ -148,6 +148,20 @@ function paintBucketClick(canvas, coordinates) {
   return canvas; 
 }
 
+function textEditor (canvas, coordinates){
+  console.log(coordinates)
+  console.log("Inside textEditor")
+  var ctx = canvas.getContext("2d");
+  let rect = canvas.getBoundingClientRect();
+  var imgData = ctx.getImageData(0,0,canvas.width, canvas.height);
+  //make the color red
+  ctx.fillStyle = "red";
+  ctx.fillRect(10, 10, 50, 50);
+  ctx.font = "20pt sans-serif";
+  ctx.fillText("Test Text", coordinates[0], coordinates[1]);
+  ctx.putImageData(imgData, 0, 0);
+  return canvas;
+}
 
 // current tool that is in use
 window.current =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
@@ -163,6 +177,7 @@ class App extends React.Component {
           <CanvasComponent /> 
           {window.current}
           <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+          <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
         </header>
       </div>
     );
