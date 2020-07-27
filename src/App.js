@@ -2,6 +2,9 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 
 
 // Whatever tool you implement will extend this class
@@ -250,6 +253,20 @@ function setColorEyeDropper(canvas, coordinates) {
   document.getElementById("color").value = RGBToHex(imageData);
 }
 
+function textEditor (canvas, coordinates){
+  console.log(coordinates)
+  console.log("Inside textEditor")
+  var ctx = canvas.getContext("2d");
+  let rect = canvas.getBoundingClientRect();
+  const x = Math.round(coordinates[0] - rect.left); 
+  const y = Math.round(coordinates[1] -rect.top);
+  //make the color red
+  ctx.fillStyle = "red";
+  ctx.fillRect(10, 10, 50, 50);
+  ctx.font = "20pt sans-serif";
+  ctx.fillText("Test Text", x, y);
+  return canvas;
+}
 
 // current tool that is in use
 var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" 
@@ -288,11 +305,23 @@ class App extends React.Component {
         <header className="App-header">
           
           <CanvasComponent /> 
-          <div id="preview" style={{preview:"hidden"}}></div> <br/>
-          <input type="color" id="color"></input> 
-          {paintBrush}
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} />
-          <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
+
+           <div id="preview" style={{preview:"hidden"}}></div> <br/>
+           <ButtonGroup color="primary" aria-label="outlined primary button group">
+            <IconButton onClick={this.handleClick}>
+              <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
+            </IconButton>
+            <IconButton onClick={this.handleClick}>
+              <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
+            </IconButton>
+            <IconButton onClick={this.handleClick}>
+              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+            </IconButton>
+      <IconButton onClick={this.handleClick}>
+                <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
+        </IconButton>
+          </ButtonGroup>
+
         </header>
       </div>
     );
