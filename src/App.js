@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 //import * as paintBucket from "paintBucket.js"; 
 // Whatever tool you implement will extend this class
 class Tool extends React.Component {
@@ -153,13 +156,13 @@ function textEditor (canvas, coordinates){
   console.log("Inside textEditor")
   var ctx = canvas.getContext("2d");
   let rect = canvas.getBoundingClientRect();
-  var imgData = ctx.getImageData(0,0,canvas.width, canvas.height);
+  const x = Math.round(coordinates[0] - rect.left); 
+  const y = Math.round(coordinates[1] -rect.top);
   //make the color red
   ctx.fillStyle = "red";
   ctx.fillRect(10, 10, 50, 50);
   ctx.font = "20pt sans-serif";
-  ctx.fillText("Test Text", coordinates[0], coordinates[1]);
-  ctx.putImageData(imgData, 0, 0);
+  ctx.fillText("Test Text", x, y);
   return canvas;
 }
 
@@ -175,9 +178,17 @@ class App extends React.Component {
         <header className="App-header">
           
           <CanvasComponent /> 
-          {window.current}
-          <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
-          <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
+           <ButtonGroup color="primary" aria-label="outlined primary button group">
+            <IconButton onClick={this.handleClick}>
+              <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
+            </IconButton>
+            <IconButton onClick={this.handleClick}>
+              <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
+            </IconButton>
+            <IconButton onClick={this.handleClick}>
+              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+            </IconButton>
+          </ButtonGroup>
         </header>
       </div>
     );
