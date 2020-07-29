@@ -285,7 +285,6 @@ function setVisible() {
     e.oncolorselect = (ev) => {document.getElementById("color").value = ev.value;}
     e.open(); 
   } catch(err) {
-    alert("attention all walmart customers, eyedropper is not available");
     let preview = document.getElementById("preview");
     preview.style.visibility="visible";
     preview.style.width = "50px";
