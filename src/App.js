@@ -307,17 +307,18 @@ class App extends React.Component {
           <CanvasComponent /> 
 
            <div id="preview" style={{preview:"hidden"}}></div> <br/>
+           <input type="color" id="color"></input> 
            <ButtonGroup color="primary" aria-label="outlined primary button group">
-            <IconButton onClick={this.handleClick}>
-              <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" text="paintbrush" onCanvasClick={donothing} onCanvasHover={donothing}/>;
+            <IconButton>
+              {paintBrush}
             </IconButton>
-            <IconButton onClick={this.handleClick}>
+            <IconButton>
               <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
             </IconButton>
-            <IconButton onClick={this.handleClick}>
-              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="doggie time" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+            <IconButton>
+              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
             </IconButton>
-      <IconButton onClick={this.handleClick}>
+      <IconButton>
                 <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
         </IconButton>
           </ButtonGroup>
