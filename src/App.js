@@ -278,13 +278,24 @@ var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.
 window.current = paintBrush; 
 
 function setVisible() {
-  let preview = document.getElementById("preview");
+  // first check if eyedropper API is available
 
-  preview.style.visibility="visible";
-  preview.style.width = "50px";
-  preview.style.height = "50px";
-  preview.style.borderRadius = "20px";
-  preview.style.backgroundColor = document.getElementById("color").value;
+  try {
+    let e = eval("new EyeDropper()");
+    e.oncolorselect = (ev) => {document.getElementById("color").value = ev.value;}
+    e.open(); 
+  } catch(err) {
+    alert("attention all walmart customers, eyedropper is not available");
+    let preview = document.getElementById("preview");
+    preview.style.visibility="visible";
+    preview.style.width = "50px";
+    preview.style.height = "50px";
+    preview.style.borderRadius = "20px";
+    preview.style.backgroundColor = document.getElementById("color").value;
+  }
+
+
+  
 }
 
 function setColorHover(canvas, coordinates) {
