@@ -5,6 +5,7 @@ import './App.css';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { render } from '@testing-library/react';
 
 
 // Whatever tool you implement will extend this class
@@ -252,10 +253,24 @@ function setColorEyeDropper(canvas, coordinates) {
   console.log(RGBToHex(imageData));
   document.getElementById("color").value = RGBToHex(imageData);
 }
+var textarea =null;
+
+function mouseDownOnTextarea(e) {
+  var x = textarea.offsetLeft - e.clientX,
+      y = textarea.offsetTop - e.clientY;
+  function drag(e) {
+      textarea.style.left = e.clientX + x + 'px';
+      textarea.style.top = e.clientY + y + 'px';
+  }
+  function stopDrag() {
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
+  }
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', stopDrag);
+}
 
 function textEditor (canvas, coordinates){
-  console.log(coordinates)
-  console.log("Inside textEditor")
   var ctx = canvas.getContext("2d");
   let rect = canvas.getBoundingClientRect();
   const x = Math.round(coordinates[0] - rect.left); 
@@ -264,7 +279,27 @@ function textEditor (canvas, coordinates){
   ctx.fillStyle = "red";
   ctx.fillRect(10, 10, 50, 50);
   ctx.font = "20pt sans-serif";
-  ctx.fillText("Test Text", x, y);
+
+  canvas.addEventListener('click', function(e) {
+    if (!textarea) {
+      console.log("inside if statement");
+        textarea = document.createElement('textarea');
+        textarea.className = 'info';
+        textarea.addEventListener('mousedown', mouseDownOnTextarea);
+        canvas.appendChild(textarea);
+    }
+    
+    textarea.value = "x: " + x + " y: " + y;
+    canvas.appendChild(textarea);
+ 
+}, false);
+  // textarea = document.createElement('textarea');
+  // textarea.className = 'info';
+  // textarea.addEventListener('mousedown', mouseDownOnTextarea);
+  // document.body.appendChild(textarea);
+  // textarea.value = "hi";
+  // const element = <textarea value ="test" />
+  // ReactDOM.render(element,document.getElementById('c'));
   return canvas;
 }
 
@@ -279,7 +314,6 @@ window.current = paintBrush;
 
 function setVisible() {
   // first check if eyedropper API is available
-
   try {
     let e = eval("new EyeDropper()");
     e.oncolorselect = (ev) => {document.getElementById("color").value = ev.value;}
@@ -292,8 +326,6 @@ function setVisible() {
     preview.style.borderRadius = "20px";
     preview.style.backgroundColor = document.getElementById("color").value;
   }
-
-
   
 }
 
@@ -322,9 +354,9 @@ class App extends React.Component {
             <IconButton>
               {paintBrush}
             </IconButton>
-            <IconButton>
+            {/* <IconButton>
               <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
-            </IconButton>
+            </IconButton> */}
             <IconButton>
               <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
             </IconButton>
