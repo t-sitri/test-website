@@ -344,8 +344,12 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        
         <header className="App-header">
-          
+          <div class = "title">
+            <h1>Y.E.E.T</h1>
+            <h3>(Yes! EyeDropper on Edge Today)</h3>
+          </div>
           <CanvasComponent /> 
 
            <div id="preview" style={{preview:"hidden"}}></div> <br/>
