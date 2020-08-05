@@ -19,7 +19,7 @@ class Tool extends React.Component {
     const preview = document.getElementById("preview");
     preview.style.height = "0px";
     preview.style.visibility ="hidden";
-
+    document.body.removeEventListener("keyup", textEditorListener);
     if(this.props.onclick) {
      
       this.props.onclick(); 
@@ -33,11 +33,6 @@ class Tool extends React.Component {
   }
 }
 
-
-function donothing(canvas, coordinates) {
-  console.log(coordinates);
-  return canvas; 
-}
 
 // How we interact with the canvas 
 class CanvasComponent extends React.Component {
@@ -253,6 +248,26 @@ function setColorEyeDropper(canvas, coordinates) {
   document.getElementById("color").value = RGBToHex(imageData);
 }
 
+const charList = 'abcdefghijklmnopqrstuvwxyz0123456789!?><,./!@#$%^&*()_+-=[]\\{}|;\'\";| enterbackspace';
+
+
+function textEditorListener(ev) {
+  const key = ev.key.toLowerCase();
+  if(charList.indexOf(key) === -1 || ev.ctrlKey)  return;
+  
+  if(ev.key == "Backspace") {
+    window.buffer.pop();
+  } else if(ev.key == "Enter") {
+    // render the text field
+    
+    window.ctx.fillText(window.buffer.join(""), window.x, window.y);
+    window.buffer = []; 
+  } else {
+    window.buffer.push(ev.key);
+  }
+}
+
+
 function textEditor (canvas, coordinates){
   console.log(coordinates)
   console.log("Inside textEditor")
@@ -260,18 +275,20 @@ function textEditor (canvas, coordinates){
   let rect = canvas.getBoundingClientRect();
   const x = Math.round(coordinates[0] - rect.left); 
   const y = Math.round(coordinates[1] -rect.top);
-  //make the color red
-  ctx.fillStyle = "red";
-  ctx.fillRect(10, 10, 50, 50);
+  ctx.fillStyle = document.getElementById("color").value;
   ctx.font = "20pt sans-serif";
-  ctx.fillText("Test Text", x, y);
+  window.buffer = []
+  window.ctx = ctx;
+  window.x = x;
+  window.y = y;  
+  document.body.addEventListener("keyup", textEditorListener);
   return canvas;
 }
 
 // current tool that is in use
 var paintBrush  =  <Tool url="https://image.flaticon.com/icons/png/512/66/66246.png" 
                         text="paintbrush" 
-                        onCanvasClick={donothing} 
+                       
                         onCanvasHover={paintBrushMouseMove} 
                         onCanvasMouseUp={paintBrushMouseUp}
                         onCanvasMouseDown={paintBrushMouseDown} />;
@@ -280,11 +297,9 @@ window.current = paintBrush;
 function setVisible() {
   // first check if eyedropper API is available
 
-  try {
-    let e = eval("new EyeDropper()");
-    e.oncolorselect = (ev) => {document.getElementById("color").value = ev.value;}
-    e.open(); 
-  } catch(err) {
+  if(window.exists) {
+    window.e.open(); 
+  } else {
     let preview = document.getElementById("preview");
     preview.style.visibility="visible";
     preview.style.width = "50px";
@@ -307,6 +322,16 @@ function setColorHover(canvas, coordinates) {
   document.getElementById("preview").style.backgroundColor = RGBToHex(imageData);
 }
 
+function loadEyedropper() {
+  try {
+    window.e =eval("new EyeDropper()");
+    window.e.oncolorselect = (ev) => {document.getElementById("color").value = ev.value;}
+    window.exists = true; 
+  } catch(err) {
+    window.exists = false; 
+  } 
+}
+window.onload = loadEyedropper(); 
 class App extends React.Component {
 
   render() {
@@ -318,15 +343,15 @@ class App extends React.Component {
 
            <div id="preview" style={{preview:"hidden"}}></div> <br/>
            <input type="color" id="color"></input> 
-           <ButtonGroup color="primary" aria-label="outlined primary button group">
+           <ButtonGroup color="primary" aria-label="outlined primary button group" >
             <IconButton>
               {paintBrush}
             </IconButton>
             <IconButton>
-              <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} onCanvasHover ={donothing} />
+              <Tool url = "https://image.flaticon.com/icons/svg/25/25645.svg" text = "Text editor" onCanvasClick = {textEditor} />
             </IconButton>
             <IconButton>
-              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick} onCanvasHover={donothing} />
+              <Tool url="https://cdn4.iconfinder.com/data/icons/proglyphs-design/512/Paint_Bucket-512.png" text="Paint Bucket" onCanvasClick={paintBucketClick}  />
             </IconButton>
       <IconButton>
                 <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
