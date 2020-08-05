@@ -5,6 +5,7 @@ import './App.css';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { render } from '@testing-library/react';
 
 
 // Whatever tool you implement will extend this class
@@ -247,6 +248,22 @@ function setColorEyeDropper(canvas, coordinates) {
   console.log(RGBToHex(imageData));
   document.getElementById("color").value = RGBToHex(imageData);
 }
+var textarea =null;
+
+function mouseDownOnTextarea(e) {
+  var x = textarea.offsetLeft - e.clientX,
+      y = textarea.offsetTop - e.clientY;
+  function drag(e) {
+      textarea.style.left = e.clientX + x + 'px';
+      textarea.style.top = e.clientY + y + 'px';
+  }
+  function stopDrag() {
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
+  }
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', stopDrag);
+}
 
 const charList = 'abcdefghijklmnopqrstuvwxyz0123456789!?><,./!@#$%^&*()_+-=[]\\{}|;\'\";| enterbackspace';
 
@@ -269,8 +286,6 @@ function textEditorListener(ev) {
 
 
 function textEditor (canvas, coordinates){
-  console.log(coordinates)
-  console.log("Inside textEditor")
   var ctx = canvas.getContext("2d");
   let rect = canvas.getBoundingClientRect();
   const x = Math.round(coordinates[0] - rect.left); 
@@ -307,8 +322,6 @@ function setVisible() {
     preview.style.borderRadius = "20px";
     preview.style.backgroundColor = document.getElementById("color").value;
   }
-
-
   
 }
 
@@ -337,8 +350,12 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
+        
         <header className="App-header">
-          
+          <div class = "title">
+            <h1>Y.E.E.T</h1>
+            <h3>(Yes! EyeDropper on Edge Today)</h3>
+          </div>
           <CanvasComponent /> 
 
            <div id="preview" style={{preview:"hidden"}}></div> <br/>
