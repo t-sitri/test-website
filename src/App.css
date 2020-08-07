@@ -50,3 +50,16 @@
     transform: rotate(360deg);
   }
 }
+
+#h3 {
+  display:flex;
+  justify-content: center;
+  text-align:center; 
+  place-items: center;
+}
+
+#logo{
+  padding:15px;
+  justify-content: center;
+
+}

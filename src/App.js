@@ -422,7 +422,7 @@ class App extends React.Component {
         <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.7.2.js"/>
         <header className="App-header">
           <div class = "title">
-            <h3>Cutting <img src ="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/1200px-Microsoft_Edge_logo_%282019%29.svg.png" width="50px" ></img> Toolkit</h3>
+            <h3 id="h3">Cutting <img id="logo" src ="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/1200px-Microsoft_Edge_logo_%282019%29.svg.png" width="50px" ></img> Toolkit</h3>
           </div>
           <CanvasComponent /> 
 
