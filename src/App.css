@@ -33,7 +33,14 @@
   color: black;
   position: relative;
   padding-bottom: 10%;
+  width: 50px;
 }
+/* 
+#logo{
+  vertical-align: middle;
+  padding: 10px;  
+  
+} */
 
 @keyframes App-logo-spin {
   from {

@@ -330,22 +330,6 @@ function setColorEyeDropper(canvas, coordinates) {
   console.log(RGBToHex(imageData));
   setColor(RGBToHex(imageData));
 }
-var textarea =null;
-
-function mouseDownOnTextarea(e) {
-  var x = textarea.offsetLeft - e.clientX,
-      y = textarea.offsetTop - e.clientY;
-  function drag(e) {
-      textarea.style.left = e.clientX + x + 'px';
-      textarea.style.top = e.clientY + y + 'px';
-  }
-  function stopDrag() {
-      document.removeEventListener('mousemove', drag);
-      document.removeEventListener('mouseup', stopDrag);
-  }
-  document.addEventListener('mousemove', drag);
-  document.addEventListener('mouseup', stopDrag);
-}
 
 const charList = 'abcdefghijklmnopqrstuvwxyz0123456789!?><,./!@#$%^&*()_+-=[]\\{}|;\'\";| enterbackspace';
 
@@ -438,8 +422,7 @@ class App extends React.Component {
         <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.7.2.js"/>
         <header className="App-header">
           <div class = "title">
-            <h1>Y.E.E.T</h1>
-            <h3>(Yes! EyeDropper on Edge Today)</h3>
+            <h3>Cutting <img src ="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Microsoft_Edge_logo_%282019%29.svg/1200px-Microsoft_Edge_logo_%282019%29.svg.png" width="50px" ></img> Toolkit</h3>
           </div>
           <CanvasComponent /> 
 
