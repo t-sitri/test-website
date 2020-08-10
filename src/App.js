@@ -440,7 +440,7 @@ class App extends React.Component {
               <Tool isBucket={true} text="Paint Bucket" onCanvasClick={paintBucketClick}  />
             </IconButton>
       <IconButton>
-                <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={setColorEyeDropper} onCanvasHover={setColorHover} onclick={setVisible} />
+                <Tool url="https://cdn.onlinewebfonts.com/svg/img_535306.png" text="EyeDropper" onCanvasClick={paintBucketClick} onCanvasHover={setColorHover} onclick={setVisible} />
         </IconButton>
           </ButtonGroup>
 
